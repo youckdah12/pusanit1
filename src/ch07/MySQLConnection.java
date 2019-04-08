@@ -64,14 +64,19 @@ public class MySQLConnection {
 		}
 	}
 
-	public void updateTeam(String name,int num) {
+	public void updateTeam(int num,String name) {
 		try {
 			//String sql="update tblTeam (set name,where num)"+"values(?,?)";
 			String sql="update tblTeam set name=? where num=?";
 			PreparedStatement pstmt=con.prepareStatement(sql);
 			pstmt.setString(1, name);
 			pstmt.setInt(2, num);
-			pstmt.executeUpdate();
+			int cnt =pstmt.executeUpdate();
+			if(cnt==1)
+				System.out.println("수정 성공");
+			else
+				System.out.println("수정 실패");
+			//pstmt.executeUpdate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -81,10 +86,11 @@ public class MySQLConnection {
 	
 	public void deleteTeam(int num) {
 		try {
-			//String sql="delete from tblTeam where num=?";
-			String sql="delete from tblTeam where num"+"value(?)";
+			String sql="delete from tblTeam where num=?";
+			//String sql="delete from tblTeam where num"+"value(?)";
 			PreparedStatement pstmt=con.prepareStatement(sql);
 			pstmt.setInt(1, num);
+			//리턴값이 있다고 해서 반드시 받아야하는 건 아님.
 			pstmt.executeUpdate();
 
 		} catch (Exception e) {
@@ -99,8 +105,8 @@ public class MySQLConnection {
 		MySQLConnection mcon=
 				new MySQLConnection();
 		//mcon.insertTeam("유창모", "인천", 33, "MC");
-		mcon.updateTeam("강호동",1);
-		//mcon.deleteTeam(2);
+		//mcon.updateTeam(1,"신동엽");
+		mcon.deleteTeam(3);
 		mcon.listTeam();
 
 	}
