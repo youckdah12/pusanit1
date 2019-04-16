@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import ch08.DBConnectionMgr;
+
 /*
  * DB와 관련된 기능의 메소드를 선언한 클래스
  * */

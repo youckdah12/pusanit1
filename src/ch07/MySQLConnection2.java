@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+import ch08.DBConnectionMgr;
+
 public class MySQLConnection2 {
 	private DBConnectionMgr pool;
 
