@@ -12,9 +12,9 @@
 			document.loginFrm.id.focus();
 			return;
 		}
-		if (document.loginFrm.pass.value == "") {
+		if (document.loginFrm.pwd.value == "") {
 			alert("비밀번호를 입력해 주세요.");
-			document.loginFrm.pass.focus();
+			document.loginFrm.pwd.focus();
 			return;
 		}
 		document.loginFrm.submit();
@@ -30,6 +30,7 @@
 <b><%=id%></b>님 환영합니다.<br/>
 제한된 기능을 사용 할 수가 있습니다.<br/>
 <a href="logout.jsp">로그아웃</a>
+<a href="memberUpdate.jsp">회원수정</a>
 <%}else{
 		id=request.getParameter("id");
 %>
