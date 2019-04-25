@@ -1,4 +1,5 @@
 <!-- showGuestBook.jsp -->
+<%@page import="guestbook.CommentBean"%>
 <%@page import="guestbook.JoinBean"%>
 <%@page import="guestbook.GuestBookBean"%>
 <%@page import="guestbook.GuestBookMgr"%>
@@ -16,7 +17,24 @@
 		url="updateGuestBook.jsp?num="+num;
 		window.open(url,"Update GuestBook","width=520,hight=300");
 	}
-
+	function commentPost(frm){
+		if(frm.comment.value==""){
+			alert("내용을 입력해주세요.");
+			frm.comment.focus();
+			return;
+		}
+		frm.submit();
+	}
+	//<div id="cmt">
+		function disFn(num){
+			var txt="cmt"+num;
+			var e=document.getElementById(txt);
+			if(e.style.display=='none')
+				e.style.display='block';
+			else
+				e.style.display='none';
+		}
+		
 </script>
 <link href="css/style.css" rel="stylesheet" type="text/css">
 </head>
@@ -75,7 +93,7 @@
 											<img alt="홈페이지" src="img/hp.bmp" border="0">
 										</a>
 										<%}%>
-									<%=writer.getHp()%></td>
+									</td>
 							</tr>
 							<tr>
 									<td colspan="3"><%=bean.getContents()%></td>
@@ -107,7 +125,65 @@
 					</td>
 				</tr>
 		</table>
-
+<!-- Comment List Start -->
+<div id="cmt<%=bean.getNum()%>">
+<%
+		Vector<CommentBean> cvlist=mgr.listComment(bean.getNum());
+		if(!cvlist.isEmpty()){
+%>
+		<table width="500" bgcolor="#F5F5F5">
+<%
+		for(int j=0;j<cvlist.size();j++){
+				CommentBean cbean=cvlist.get(j);
+%>
+		<tr>
+			<td>
+				<table width="500">
+					<tr>
+						<td><b><%=cbean.getCid() %></b></td>
+						<td align="right">
+						<%if(cbean.getCid().equals(login.getId())){ %>
+						<a href="commentProc.jsp?flag=delete&cnum=<%=cbean.getCnum()%>">[삭제]</a>
+						<%} %>
+						</td>
+					</tr>
+					<tr>
+					<td colspan="2"><%=cbean.getComment() %></td>
+					</tr>
+					<tr>
+					<td><%=cbean.getCip() %></td>
+					<td align="right"><%=cbean.getCregDate() %></td>
+					</tr>
+				</table>
+				<hr/>
+			</td>
+		</tr>
+<%}//--for %>
+</table>
+<%}//--if %>
+</div>
+<table width="500">
+<tr>
+<td><button onclick="disFn('<%=bean.getNum()%>')">댓글<%=cvlist.size() %></button></td>
+</tr>
+</table>
+<!-- Comment List End -->
+<!-- Comment Form Start -->
+				<form name="cFrm" action="commentProc.jsp">
+				<table>
+				<tr>
+					<td><textarea name="comment" cols="72" rows="2"
+							maxlength="1000"></textarea></td>
+					<td><input type="button" value="댓글" onclick="javascript:commentPost(this.form)">
+					<input type="hidden" name="flag" value="insert">
+					<input type="hidden" name="num" value="<%=bean.getNum()%>">
+					<input type="hidden" name="cid" value="<%=login.getId()%>">
+					<input type="hidden" name="cip" value="<%=request.getRemoteAddr()%>">
+					</td>
+				</tr>
+				</table>
+				</form>
+<!-- Comment Form End -->
 <%
 			}//--for	
 		}//--if

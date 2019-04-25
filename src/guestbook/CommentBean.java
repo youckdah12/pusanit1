@@ -1,21 +1,22 @@
 package guestbook;
 
-public class CommentMgr {
-	private String cnum;
- 	private String num;
+public class CommentBean {
+	private int cnum;
+ 	private int num;
  	private String cid; 
- 	private String cip; 
+ 	private String comment;
+	private String cip; 
  	private String cregDate;
-	public String getCnum() {
+	public int getCnum() {
 		return cnum;
 	}
-	public void setCnum(String cnum) {
+	public void setCnum(int cnum) {
 		this.cnum = cnum;
 	}
-	public String getNum() {
+	public int getNum() {
 		return num;
 	}
-	public void setNum(String num) {
+	public void setNum(int num) {
 		this.num = num;
 	}
 	public String getCid() {
@@ -23,6 +24,12 @@ public class CommentMgr {
 	}
 	public void setCid(String cid) {
 		this.cid = cid;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	public String getCip() {
 		return cip;

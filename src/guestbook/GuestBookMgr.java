@@ -188,7 +188,7 @@ public class GuestBookMgr {
 			return bean;
 
 		}
-		//GuestBook Update:contents,ip,secret 3개 수정
+		//GuestBook Update : contents,ip,secret 3개 수정
 		public void updateGuestBook(GuestBookBean bean){
 			Connection con = null;
 			PreparedStatement pstmt = null;
@@ -209,5 +209,99 @@ public class GuestBookMgr {
 			}
 			return;
 		}
-
+		
+		//댓글메소드
+		
+		//Comment List
+		public Vector<CommentBean> listComment(int num){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		String sql = null;
+		Vector<CommentBean> vlist=new Vector<>();
+		try {
+			con = pool.getConnection(); 
+				sql = "select * from tblComment where num=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				CommentBean bean=new CommentBean();
+				//모든 타입의 값은 getString가능 심지어 int형도 가능
+				bean.setCnum(rs.getInt(1));
+				bean.setNum(rs.getInt(2));
+				bean.setCid(rs.getString(3));
+				bean.setComment(rs.getString(4));	
+				bean.setCip(rs.getString(5));	
+				String tempDate=SDF_DATE.format(rs.getDate(6));
+				bean.setCregDate(tempDate);
+				vlist.addElement(bean);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt, rs);
+		}
+		return vlist;
+}
+		//Comment Insert
+		public void insertComment(CommentBean bean) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			try {
+				con = pool.getConnection();
+				sql = "insert tblComment(num,cid,comment,cip,cregDate) values(?,?,?,?,now())";
+				pstmt = con.prepareStatement(sql);
+				
+				pstmt.setInt(1,bean.getNum());
+				pstmt.setString(2,bean.getCid());
+				pstmt.setString(3,bean.getComment());
+				pstmt.setString(4,bean.getCip());
+				pstmt.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+		}
+		
+		//Comment Delete
+		public void deleteComment(int cnum) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			try {
+				con = pool.getConnection();
+				sql = "delete from tblComment where cnum=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, cnum);
+				pstmt.executeUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+		}
+		
+		//Comment All Delete => 관련 방명록글 삭제시 모든 댓글 삭제
+		public void deleteAllComment(int num) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			try {
+				con = pool.getConnection();
+				sql = "deleteall from tblComment where num=?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, num);
+				pstmt.executeUpdate();	
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+			return;
+		}
+		
 }
