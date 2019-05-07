@@ -17,5 +17,13 @@ CREATE TABLE `tblBoard` (
 	PRIMARY KEY ( `num` )
 )COLLATE='euckr_korean_ci';
 
+create table tblBComment(
+ cnum int primary key auto_increment,
+ num int,
+ name varchar(20),
+ comment varchar(200),
+ regdate date
+)COLLATE='euckr_korean_ci';
+
 insert tblBoard(name,content,subject,ref,pos,depth,regdate,pass,count,ip,filename,filesize)
 values('aaa', 'bbb', 'ccc', 0, 0, 0, now(), '1111',0, '127.0.0.1', null, 0)

@@ -14,6 +14,7 @@ import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 
 import guestbook.CommentBean;
+import guestbook.DBConnectionMgr;
 
 public class FileuploadMgr {
 
