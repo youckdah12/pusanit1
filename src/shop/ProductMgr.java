@@ -32,7 +32,7 @@ public class ProductMgr {
 				ProductBean bean =new ProductBean();
 				bean.setNo(rs.getString(1));
 				bean.setName(rs.getString(2));
-				bean.setPrice(rs.getString(3));
+				bean.setPrice(rs.getInt(3));
 				bean.setDate(rs.getString(4));
 				bean.setStock(rs.getString(5));
 				vlist.addElement(bean);
@@ -63,7 +63,7 @@ public class ProductMgr {
 			if(rs.next()) {
 				bean.setNo(rs.getString("no"));//상품번호
 				bean.setName(rs.getString("name"));//상품이름
-				bean.setPrice(rs.getString("price"));//상품가격
+				bean.setPrice(rs.getInt("price"));//상품가격
 				bean.setDetail(rs.getString("detail"));//상품상세설명
 				bean.setDate(rs.getString("date"));
 				bean.setStock(rs.getString("stock"));//상품제고
@@ -78,7 +78,23 @@ public class ProductMgr {
 
 	}
 	//Product Stock Reduce(재고 수정)
-	
+	public void reduceProduct(OrderBean order){
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		try {
+			con = pool.getConnection();
+			sql = "update tblProduct set stock=stock-? where no=?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, order.getQuantity());
+			pstmt.setInt(2, order.getProductNo());
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+	}
 	/////admin mode//////////
 	
 	//Product Insert

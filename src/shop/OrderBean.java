@@ -1,30 +1,33 @@
 package shop;
 
 public class OrderBean {
-		private String no;
-		private String productNo;
-		private String quantity;
+		private int no;
+		private int productNo;
+		public int getNo() {
+			return no;
+		}
+		public void setNo(int no) {
+			this.no = no;
+		}
+		public int getProductNo() {
+			return productNo;
+		}
+		public void setProductNo(int productNo) {
+			this.productNo = productNo;
+		}
+		private int quantity;
+		public int getQuantity() {
+			return quantity;
+		}
+		public void setQuantity(int quantity) {
+			this.quantity = quantity;
+		}
 		private String date;
 		private String state;
 		private String id;
-		public String getNo() {
-			return no;
-		}
-		public void setNo(String no) {
-			this.no = no;
-		}
-		public String getProductNo() {
-			return productNo;
-		}
-		public void setProductNo(String productNo) {
-			this.productNo = productNo;
-		}
-		public String getQuantity() {
-			return quantity;
-		}
-		public void setQuantity(String quantity) {
-			this.quantity = quantity;
-		}
+		
+		
+	
 		public String getDate() {
 			return date;
 		}

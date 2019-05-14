@@ -1,14 +1,21 @@
 package shop;
 
 public class ProductBean {
+	
 	private String no;
 	private String name;
-	private String price;
+	private int price;
 	private String detail;
 	private String date;
 	private String stock;
 	private String image;
 	
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
 	public String getNo() {
 		return no;
 	}
@@ -21,12 +28,7 @@ public class ProductBean {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getPrice() {
-		return price;
-	}
-	public void setPrice(String price) {
-		this.price = price;
-	}
+	
 	public String getDetail() {
 		return detail;
 	}
