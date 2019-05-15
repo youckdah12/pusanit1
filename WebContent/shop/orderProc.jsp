@@ -27,5 +27,5 @@
 %>
 <script>
 		alert("<%=msg%>");
-		losction.href="orderList.jsp";
+		location.href="orderList.jsp";
 </script>

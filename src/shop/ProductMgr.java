@@ -5,10 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
+import com.oreilly.servlet.MultipartRequest;
+import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+
 public class ProductMgr {
 		
 	private DBConnectionMgr pool;
-	private static final String UPLOAD = "C:/Jsp/myapp/WebContent/shop/data/";
+	private static final String UPLOAD = "C:/Jsp/eclipse-workspace/myapp/WebContent/shop/data/";
 	private static final String ENCTYPE = "EUC-KR";
 	private static final int MAXSIZE = 10*1024*1024;
 	
@@ -98,10 +103,95 @@ public class ProductMgr {
 	/////admin mode//////////
 	
 	//Product Insert
-	
+	public boolean insertProduct(HttpServletRequest req) {
+		Connection con = null;
+		PreparedStatement pstmt = null;
+		String sql = null;
+		boolean flag =false;
+		try {
+			MultipartRequest multi=new MultipartRequest(req, UPLOAD, MAXSIZE, ENCTYPE, new DefaultFileRenamePolicy());
+			con = pool.getConnection();
+			sql = "insert tblProduct(name,price,detail,date,stock,image)"
+					+ "values(?,?,?,?,?,?)";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, multi.getParameter("name"));
+			pstmt.setInt(2, Integer.parseInt(multi.getParameter("price")));
+			pstmt.setString(3, multi.getParameter("detail"));
+			pstmt.setString(4, UtilMgr.getDay());
+			pstmt.setInt(5, Integer.parseInt(multi.getParameter("stock")));
+			
+			if(multi.getFilesystemName("image")==null)
+					pstmt.setString(6, "ready.jsp");
+			else
+					pstmt.setNString(6, multi.getFilesystemName("image"));
+			if(pstmt.executeUpdate()==1)
+				flag =true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			pool.freeConnection(con, pstmt);
+		}
+		return flag;
+	}
 	//Product Update
+		public boolean updateProduct(HttpServletRequest req) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			boolean flag =false;
+			try {
+				MultipartRequest multi=new MultipartRequest(req, UPLOAD, MAXSIZE, ENCTYPE, new DefaultFileRenamePolicy());
+				con = pool.getConnection();
+				if(multi.getFilesystemName("image")==null) {
+						//파일은 선택을 안 함.
+					sql="update tblProduct set name=?, price=?, detail=?, stock=? where no = ?";
+					pstmt = con.prepareStatement(sql);
+					pstmt.setString(1, multi.getParameter("name"));
+					pstmt.setInt(2, Integer.parseInt(multi.getParameter("price")));
+					pstmt.setString(3, multi.getParameter("detail"));
+					pstmt.setInt(4, Integer.parseInt(multi.getParameter("stock")));
+					pstmt.setInt(5, Integer.parseInt(multi.getParameter("no")));
+				}else {
+						//파일까지 수정함.
+				sql="update tblProduct set name=?, price=?, detail=?, stock=?, image=? where no = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setString(1, multi.getParameter("name"));
+				pstmt.setInt(2, Integer.parseInt(multi.getParameter("price")));
+				pstmt.setString(3, multi.getParameter("detail"));
+				pstmt.setInt(4, Integer.parseInt(multi.getParameter("stock")));
+				pstmt.setNString(5, multi.getFilesystemName("image"));
+				pstmt.setInt(6, Integer.parseInt(multi.getParameter("no")));
+				}
+				if(pstmt.executeUpdate()==1) flag=true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+			return flag;
+
+		}
 	
 	//Product Delete
-	
+		public boolean deleteProduct(int no) {
+			Connection con = null;
+			PreparedStatement pstmt = null;
+			String sql = null;
+			boolean flag =false;
+			try {
+				con = pool.getConnection();
+				sql = "delete from tblProduct where no = ?";
+				pstmt = con.prepareStatement(sql);
+				pstmt.setInt(1, no);
+				if(pstmt.executeUpdate()==1)
+					flag=true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			} finally {
+				pool.freeConnection(con, pstmt);
+			}
+			return flag;
+
+		}
 	
 }

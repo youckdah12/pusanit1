@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import shop.Gmail_Mail;
+
 public class MemberMgr {
 	
 	private DBConnectionMgr pool;
@@ -220,4 +222,6 @@ public class MemberMgr {
 		}
 		return flag;
 	}
+	
+
 }
